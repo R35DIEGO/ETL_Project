@@ -31,7 +31,6 @@ mongo_uri = "mongodb+srv://diegoloria38:zTXN0YAqVR9zov9Q@bigdataubuntu.psjwglz.m
 client = MongoClient(mongo_uri)
 db = client["project_api"]
 collection = db["proyecto_de_apis"]
-volc_collection = db["processed_volcanoes"]
 
 st.title("🌋 Mapa de Peligros Naturales en Chile (2010–2020)")
 
@@ -68,8 +67,8 @@ if not df_ts.empty and {"latitude", "longitude"}.issubset(df_ts.columns):
 else:
     df_ts = pd.DataFrame(columns=["lat", "lon", "type", "color", "valor"])
 
-# 🌋 VOLCANES
-volc_data = list(volc_collection.find())
+# 🌋 VOLCANES (desde el mismo documento)
+volc_data = data_doc.get("volcanoes", []) if data_doc else []
 df_volc = pd.DataFrame(volc_data)
 
 if not df_volc.empty and {"latitude", "longitude", "name", "year"}.issubset(df_volc.columns):
